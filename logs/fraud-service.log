@@ -1,0 +1,25 @@
+2025-07-30 14:16:21,021 [CRITICAL] fraud-service: Fraud event: account_takeover
+2025-07-30 14:19:14,337 [INFO] fraud-service: Fraud event: false_positive
+2025-07-30 14:19:14,337 [CRITICAL] fraud-service: Fraud event: account_takeover
+2025-07-30 14:20:14,565 [ERROR] fraud-service: Fraud event: identity_theft
+2025-07-30 14:21:13,472 [INFO] fraud-service: Fraud event: false_positive
+2025-07-30 14:22:19,082 [ERROR] fraud-service: Fraud event: identity_theft
+2025-07-30 14:22:19,082 [CRITICAL] fraud-service: Fraud event: account_takeover
+2025-07-30 14:22:32,393 [ERROR] fraud-service: Fraud event: identity_theft
+2025-07-30 14:24:20,474 [WARNING] fraud-service: Suspicious transaction pattern detected
+2025-07-30 14:24:20,475 [WARNING] fraud-service: Suspicious transaction pattern detected
+2025-07-30 14:25:03,648 [CRITICAL] fraud-service: Fraud event: account_takeover
+2025-07-30 14:26:12,682 [CRITICAL] fraud-service: Fraud event: account_takeover
+2025-07-30 14:28:54,652 [INFO] fraud-service: Fraud event: false_positive
+2025-07-30 14:29:07,092 [ERROR] fraud-service: Fraud event: identity_theft
+2025-07-30 14:31:50,027 [WARNING] fraud-service: Suspicious transaction pattern detected
+2025-07-30 14:32:40,467 [WARNING] fraud-service: Suspicious transaction pattern detected
+2025-07-30 14:33:03,670 [ERROR] fraud-service: Fraud event: identity_theft
+2025-07-30 14:33:03,671 [ERROR] fraud-service: Card fraud detected
+2025-07-30 14:33:56,923 [WARNING] fraud-service: Suspicious transaction pattern detected
+2025-07-30 14:33:56,923 [INFO] fraud-service: Fraud event: false_positive
+2025-07-30 14:34:41,774 [ERROR] fraud-service: Card fraud detected
+2025-07-30 14:35:40,085 [INFO] fraud-service: Fraud event: false_positive
+2025-07-30 14:38:34,822 [ERROR] fraud-service: Card fraud detected
+2025-07-30 14:38:51,277 [WARNING] fraud-service: Suspicious transaction pattern detected
+2025-07-30 14:38:51,278 [WARNING] fraud-service: Suspicious transaction pattern detected

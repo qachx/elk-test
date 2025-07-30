@@ -1,0 +1,183 @@
+version: '3.8'
+
+services:
+  # ========================================
+  # ELK Stack
+  # ========================================
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - elk
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.11.0
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - ./logstash/config:/usr/share/logstash/config
+      - ./logs:/logs
+    ports:
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: ""
+      ELASTICSEARCH_PASSWORD: ""
+    volumes:
+      - ./kibana/config:/usr/share/kibana/config
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  # ========================================
+  # Prometheus & Grafana
+  # ========================================
+  
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - elk
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - elk
+
+  # ========================================
+  # Banking Services Simulators
+  # ========================================
+  
+  auth-service-generator:
+    build: ./generators/auth-service
+    container_name: auth-service-logs
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - SERVICE_NAME=auth-service
+      - LOG_LEVEL=INFO
+    networks:
+      - elk
+    restart: unless-stopped
+
+  payment-service-generator:
+    build: ./generators/payment-service
+    container_name: payment-service-logs
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - SERVICE_NAME=payment-service
+      - LOG_LEVEL=INFO
+    networks:
+      - elk
+    restart: unless-stopped
+
+  fraud-service-generator:
+    build: ./generators/fraud-service
+    container_name: fraud-service-logs
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - SERVICE_NAME=fraud-service
+      - LOG_LEVEL=INFO
+    networks:
+      - elk
+    restart: unless-stopped
+
+  notification-service-generator:
+    build: ./generators/notification-service
+    container_name: notification-service-logs
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - SERVICE_NAME=notification-service
+      - LOG_LEVEL=INFO
+    networks:
+      - elk
+    restart: unless-stopped
+
+  # ========================================
+  # Metrics Exporter
+  # ========================================
+  
+  metrics-exporter:
+    build: ./generators/metrics-exporter
+    container_name: metrics-exporter
+    ports:
+      - "8081:8080"
+    environment:
+      - METRICS_PORT=8080
+    networks:
+      - elk
+    restart: unless-stopped
+
+  # ========================================
+  # Auto Setup
+  # ========================================
+  
+  setup-init:
+    build: ./init-setup
+    container_name: setup-init
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+      - kibana
+    restart: "no"
+
+volumes:
+  elasticsearch_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  elk:
+    driver: bridge 

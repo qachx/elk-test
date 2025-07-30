@@ -1,0 +1,2 @@
+# This file ensures the logs directory is created in git
+# The directory will be mounted to containers for log storage 
