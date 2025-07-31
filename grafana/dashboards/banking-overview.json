@@ -1,7 +1,6 @@
 {
-  "dashboard": {
-    "id": null,
-    "title": "Banking System Overview",
+  "id": null,
+  "title": "Banking System Overview",
     "tags": ["banking", "monitoring"],
     "timezone": "browser",
     "panels": [
@@ -127,5 +126,4 @@
       "to": "now"
     },
     "refresh": "5s"
-  }
 } 
