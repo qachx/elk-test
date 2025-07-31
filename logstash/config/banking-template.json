@@ -20,15 +20,26 @@
         "level": {
           "type": "keyword"
         },
+        "event_type": {
+          "type": "keyword"
+        },
         "message": {
           "type": "text",
-          "analyzer": "standard"
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
         },
         "user_id": {
           "type": "keyword"
         },
-        "transaction_id": {
+        "username": {
           "type": "keyword"
+        },
+        "client_ip": {
+          "type": "ip"
         },
         "amount": {
           "type": "float"
@@ -36,8 +47,44 @@
         "currency": {
           "type": "keyword"
         },
-        "client_ip": {
-          "type": "ip"
+        "transaction_id": {
+          "type": "keyword"
+        },
+        "sender_account": {
+          "type": "keyword"
+        },
+        "recipient_account": {
+          "type": "keyword"
+        },
+        "risk_score": {
+          "type": "integer"
+        },
+        "account_locked": {
+          "type": "boolean"
+        },
+        "failed_attempts": {
+          "type": "integer"
+        },
+        "lock_duration": {
+          "type": "integer"
+        },
+        "night_transaction": {
+          "type": "boolean"
+        },
+        "notification_type": {
+          "type": "keyword"
+        },
+        "notification_status": {
+          "type": "keyword"
+        },
+        "tags": {
+          "type": "keyword"
+        },
+        "log_format": {
+          "type": "keyword"
+        },
+        "index_suffix": {
+          "type": "keyword"
         },
         "geoip": {
           "properties": {
@@ -49,17 +96,11 @@
             },
             "city_name": {
               "type": "keyword"
+            },
+            "continent_code": {
+              "type": "keyword"
             }
           }
-        },
-        "risk_score": {
-          "type": "integer"
-        },
-        "processing_time_ms": {
-          "type": "integer"
-        },
-        "tags": {
-          "type": "keyword"
         }
       }
     }
